@@ -1,2 +1,2 @@
 # calliope
-GDB tool for execution trace
+GDB tool for instruction trace
