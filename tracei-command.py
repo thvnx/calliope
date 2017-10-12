@@ -109,7 +109,7 @@ class instruction_trace_command (gdb.Command):
                     insn = "<error while examine $pc>"
                     addr = insn
 
-                of.write ("{}:{}:{}:{}:{}\n".format (addr, insn, disa[0]["length"], disa[0]["addr"], disa[0]["asm"]))
+                of.write ("{}:{}:{}\n".format (addr, insn, disa[0]["asm"]))
 
                 gdb.execute ("stepi", to_string=True)
                 i += 1
