@@ -42,7 +42,7 @@ trace_command = "tracei" + (" 1" if disassemble else " 0") \
 
 try:
     gdb_process = subprocess.Popen (
-        ["gdb", "-ex", "source ./tracei-command.py", "-ex", trace_command, "--args"] + gdb_args.split(','),
+        ["gdb", "-ex", "source ./tracei-command.py", "-ex", trace_command, "--args"] + gdb_args.split(','),
         stdout=fout,
         stderr=ferr)
     gdb_process.wait()
