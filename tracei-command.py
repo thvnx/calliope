@@ -18,7 +18,7 @@ class instruction_trace_stop_point (gdb.Breakpoint):
     def __init__ (self, spec):
         # init breakpoint at spec
         super(instruction_trace_stop_point, self).__init__(spec, internal=False)
-        
+
     def stop (self):
         # breakpoint has been reached
         global stop_command, stop_message
@@ -54,7 +54,7 @@ class instruction_trace_command (gdb.Command):
 
         gdb.execute ("break {}".format (breakpoint))
         gdb.execute ("start")
-       
+
         if breakpoint == 'main':
             # allow to find a frame above main's frame
             gdb.execute ("set backtrace past-main 1", to_string=True)
@@ -91,7 +91,7 @@ class instruction_trace_command (gdb.Command):
                     insn = gdb.execute ("x/{}xb $pc".format (disa[0]["length"]), to_string=True)
                 except:
                     insn = "<error while examine $pc>"
-                    
+
                 of.write ("{}:{}:{}:{}\n".format (insn[:-1], disa[0]["length"], disa[0]["addr"], disa[0]["asm"]))
 
                 gdb.execute ("stepi", to_string=True)
@@ -99,7 +99,7 @@ class instruction_trace_command (gdb.Command):
 
             except Exception as e:
                 print ("Exception: {}".format (e))
-                
+
         print("Done: {}".format(stop_message))
         print("{} instructions executed".format(i))
 
