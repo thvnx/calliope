@@ -99,7 +99,7 @@ class instruction_trace_command (gdb.Command):
         arch = gdb.selected_frame().architecture()
 
         of.write ('"trace":{\n')
-        
+
         i = 0
         l = limit if limit > 0 else sys.maxsize
         while (not stop_command) and i < l:
@@ -140,7 +140,7 @@ class instruction_trace_command (gdb.Command):
 
         of.write ('"eot":"{}"\n'.format (datetime.datetime.now ()))
         of.write ('}}\n')
-        
+
         of.close ()
         gdb.execute("quit")
 
