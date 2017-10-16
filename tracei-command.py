@@ -15,16 +15,13 @@ def long_of (addr):
         return int (addr)
 
 def format_examine (insn):
-    try:
-        # get the instruction bytes and join them to form the entire instruction
-        insn_bytes = insn[insn.rindex (":") + 1:].strip ().split ()
-        insn_merged_b = [insn_bytes[-1]] + [elem[2:] for elem in insn_bytes[-2::-1]]
-        insn_merged_b = ''.join (insn_merged_b)
-        # get the address
-        insn_addr = insn[:insn.index ("<")].strip ()
-        return [insn_addr, insn_merged_b]
-    except:
-        return [insn, insn]
+    # get the instruction bytes and join them to form the entire instruction
+    insn_bytes = insn[insn.rindex (":") + 1:].strip ().split ()
+    insn_merged_b = [insn_bytes[-1]] + [elem[2:] for elem in insn_bytes[-2::-1]]
+    insn_merged_b = ''.join (insn_merged_b)
+    # get the address
+    insn_addr = insn[:insn.index ("<")].strip ()
+    return [insn_addr, insn_merged_b]
 
 
 def handler (signum, frame):
@@ -117,9 +114,14 @@ class instruction_trace_command (gdb.Command):
                     formated_examine = format_examine (examine)
                     addr = formated_examine[0]
                     insn = formated_examine[1]
+                except gdb.error:
+                    global stop_command, stop_message
+                    stop_command = True
+                    stop_message = "error while examine $pc"
                 except:
-                    insn = "<error while examine $pc>"
-                    addr = insn
+                    global stop_command, stop_message
+                    stop_command = True
+                    stop_message = "error while formating examine"
 
                 if disassemble:
                     asm = " ".join (disa[0]["asm"].split ())
