@@ -21,7 +21,9 @@ def format_examine (insn):
     insn_merged_b = ''.join (insn_merged_b)
     # get the address
     insn_addr = insn[:insn.index ("<")].strip ()
-    return [insn_addr, insn_merged_b]
+    # get the label
+    insn_lbl = insn[insn.index ("<") + 1:insn.rindex (">")]
+    return [insn_addr, insn_merged_b, insn_lbl]
 
 
 def handler (signum, frame):
@@ -114,6 +116,7 @@ class instruction_trace_command (gdb.Command):
                     formated_examine = format_examine (examine)
                     addr = formated_examine[0]
                     insn = formated_examine[1]
+                    labl = formated_examine[2]
                 except gdb.error:
                     global stop_command, stop_message
                     stop_command = True
@@ -125,7 +128,7 @@ class instruction_trace_command (gdb.Command):
 
                 if disassemble:
                     asm = " ".join (disa[0]["asm"].split ())
-                    of.write ('"{}":{{"insn":"{}","asm":"{}"}},\n'.format (addr, insn, asm))
+                    of.write ('"{}":{{"insn":"{}","asm":"{}","debug":"{}"}},\n'.format (addr, insn, asm, labl))
                 else:
                     of.write ('"{}":{{"insn":"{}"}},\n'.format (addr, insn))
 
