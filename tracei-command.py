@@ -2,6 +2,7 @@
 
 import gdb
 import signal
+import datetime
 
 
 stop_message = None
@@ -67,6 +68,9 @@ class instruction_trace_command (gdb.Command):
         limit       = int (args[3])
 
         of = open (outputfile, 'w')
+        of.write ('{\n')
+        of.write ('"info":{{"calliope":"{}","date":"{}"}},\n'.format (args,
+                                                        datetime.datetime.now ()))
 
         gdb.execute ("set pagination off", to_string=True)
         gdb.execute ("set confirm off",    to_string=True)
@@ -97,6 +101,8 @@ class instruction_trace_command (gdb.Command):
 
         arch = gdb.selected_frame().architecture()
 
+        of.write ('"trace":{\n')
+        
         i = 0
         l = limit if limit > 0 else sys.maxsize
         while (not stop_command) and i < l:
@@ -130,6 +136,9 @@ class instruction_trace_command (gdb.Command):
         print("Done: {}".format(stop_message))
         print("{} instructions executed".format(i))
 
+        of.write ('"eot":"{}"\n'.format (datetime.datetime.now ()))
+        of.write ('}}\n')
+        
         of.close ()
         gdb.execute("quit")
 
