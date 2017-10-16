@@ -7,6 +7,12 @@ import signal
 stop_message = None
 stop_command = False
 
+def long_of (addr):
+    try:
+        return long (addr)
+    except:
+        return int (addr)
+
 def format_examine (insn):
     try:
         # get the instruction bytes and join them to form the entire instruction
@@ -55,7 +61,7 @@ class instruction_trace_command (gdb.Command):
         # - n       limits the trace to the n first instructions
 
         args = args.split( )
-        disassemble = args[0]
+        disassemble = True if args[0] == "1" else False
         outputfile  = args[1]
         breakpoint  = args[2]
         limit       = int (args[3])
@@ -82,7 +88,7 @@ class instruction_trace_command (gdb.Command):
         stop_at = gdb.selected_frame().older().pc()
 
         # set a breakpoint which will stop the trace when reached
-        instruction_trace_stop_point ("*{}".format (long (stop_at)))
+        instruction_trace_stop_point ("*{}".format (long_of (stop_at)))
 
         if not breakpoint == 'main':
             # weird fix to unsure that the first instructions of
@@ -97,7 +103,7 @@ class instruction_trace_command (gdb.Command):
             try:
                 # disassemble the current instruction
                 pc = gdb.parse_and_eval ("$pc")
-                disa = arch.disassemble (long (pc))
+                disa = arch.disassemble (long_of (pc))
 
                 # write it to outputfile
                 try:
@@ -109,7 +115,10 @@ class instruction_trace_command (gdb.Command):
                     insn = "<error while examine $pc>"
                     addr = insn
 
-                of.write ("{}:{}:{}\n".format (addr, insn, disa[0]["asm"]))
+                if disassemble:
+                    of.write ("{}:{}:{}\n".format (addr, insn, disa[0]["asm"]))
+                else:
+                    of.write ("{}:{}\n".format (addr, insn))
 
                 gdb.execute ("stepi", to_string=True)
                 i += 1

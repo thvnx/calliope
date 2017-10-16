@@ -30,7 +30,6 @@ for opt, arg in opts:
         limit = arg
     elif opt in ("-a", "--args"):
         gdb_args = arg
-disassemble = True # for now only disassemble = True is supported
 
 fout = open ('calliope.stdout', 'w')
 ferr = open ('calliope.stderr', 'w')
