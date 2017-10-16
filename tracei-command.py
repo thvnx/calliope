@@ -116,9 +116,10 @@ class instruction_trace_command (gdb.Command):
                     addr = insn
 
                 if disassemble:
-                    of.write ("{}:{}:{}\n".format (addr, insn, disa[0]["asm"]))
+                    asm = " ".join (disa[0]["asm"].split ())
+                    of.write ('"{}":{{"insn":"{}","asm":"{}"}},\n'.format (addr, insn, asm))
                 else:
-                    of.write ("{}:{}\n".format (addr, insn))
+                    of.write ('"{}":{{"insn":"{}"}},\n'.format (addr, insn))
 
                 gdb.execute ("stepi", to_string=True)
                 i += 1

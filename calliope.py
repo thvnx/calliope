@@ -35,7 +35,7 @@ fout = open ('calliope.stdout', 'w')
 ferr = open ('calliope.stderr', 'w')
 
 trace_command = "tracei" + (" 1" if disassemble else " 0") \
-  + (" " + outputfile + (".trc" if disassemble else ".brc")) \
+  + (" " + outputfile + ".json") \
   + (" " + breakpoint) \
   + (" " + limit if limit else " 0")
 
