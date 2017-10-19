@@ -1,4 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""calliope.py: GDB tool handler for instruction trace."""
+
+__author__ = "Laurent Thévenoux"
+__copyright__ = "Copyright 2017"
+__license__ = "MIT, see LICENSE file"
+__email__ = "laurent.thevenoux@gmail.com"
 
 import sys
 import getopt

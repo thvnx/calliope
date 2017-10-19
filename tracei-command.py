@@ -1,4 +1,11 @@
-#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+"""tracei-command.py: GDB tool for instruction trace."""
+
+__author__ = "Laurent Thévenoux"
+__copyright__ = "Copyright 2017"
+__license__ = "MIT, see LICENSE file"
+__email__ = "laurent.thevenoux@gmail.com"
 
 import gdb
 import signal
@@ -104,6 +111,7 @@ class instruction_trace_command (gdb.Command):
 
         i = 0
         l = limit if limit > 0 else sys.maxsize
+        global stop_command, stop_message
         while (not stop_command) and i < l:
             try:
                 # disassemble the current instruction
@@ -118,11 +126,9 @@ class instruction_trace_command (gdb.Command):
                     insn = formated_examine[1]
                     labl = formated_examine[2]
                 except gdb.error:
-                    global stop_command, stop_message
                     stop_command = True
                     stop_message = "error while examine $pc"
                 except:
-                    global stop_command, stop_message
                     stop_command = True
                     stop_message = "error while formating examine"
 
