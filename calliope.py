@@ -20,8 +20,8 @@ gdb_args    = 'a.out'
 
 try:
     opts, args = getopt.getopt(sys.argv[1:],
-                                   "do:b:l:a:",
-                                   ["disassemble", "output=", "break=", "limit=", "args="])
+                                   "cdo:b:l:a:",
+                                   ["clean", "disassemble", "output=", "break=", "limit=", "args="])
 except getopt.GetoptError as err:
     print str(err)
     #usage()
@@ -38,6 +38,9 @@ for opt, arg in opts:
         limit = arg
     elif opt in ("-a", "--args"):
         gdb_args = arg
+    elif opt in ("-c", "--clean"):
+        subprocess.Popen (["rm", "-vf", "calliope.stderr", "calliope.stdout"])
+        sys.exit ()
 
 fout = open ('calliope.stdout', 'w')
 ferr = open ('calliope.stderr', 'w')
