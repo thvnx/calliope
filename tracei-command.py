@@ -147,7 +147,8 @@ class instruction_trace_command (gdb.Command):
         print("Done: {}".format(stop_message))
         print("{} instructions executed".format(i))
 
-        of.write ('"eot":"{}"\n'.format (datetime.datetime.now ()))
+        of.write ('"eot":"{}",\n'.format (datetime.datetime.now ()))
+        of.write ('"length":"{}"\n'.format (i))
         of.write ('}}\n')
 
         of.close ()
