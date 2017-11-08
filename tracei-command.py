@@ -24,7 +24,7 @@ def long_of (addr):
 def format_examine (insn):
     # get the instruction bytes and join them to form the entire instruction
     insn_bytes = insn[insn.rindex (":") + 1:].strip ().split ()
-    insn_merged_b = [insn_bytes[-1]] + [elem[2:] for elem in insn_bytes[-2::-1]]
+    insn_merged_b = [insn_bytes[0]] + [elem[2:] for elem in insn_bytes[1:]]
     insn_merged_b = ''.join (insn_merged_b)
     # get the address
     insn_addr = insn[:insn.index ("<")].strip ()
