@@ -26,10 +26,16 @@ def format_examine (insn):
     insn_bytes = insn[insn.rindex (":") + 1:].strip ().split ()
     insn_merged_b = [insn_bytes[0]] + [elem[2:] for elem in insn_bytes[1:]]
     insn_merged_b = ''.join (insn_merged_b)
-    # get the address
-    insn_addr = insn[:insn.index ("<")].strip ()
-    # get the label
-    insn_lbl = insn[insn.index ("<") + 1:insn.rindex (">")]
+    if ">:" not in insn:
+        # get the address
+        insn_addr = insn[:insn.index (":")].strip ()
+        # no label
+        insn_lbl = "n/a"
+    else:
+        # get the address
+        insn_addr = insn[:insn.index ("<")].strip ()
+        # get the label
+        insn_lbl = insn[insn.index ("<") + 1:insn.rindex (">")]
     return [insn_addr, insn_merged_b, insn_lbl]
 
 
@@ -121,16 +127,16 @@ class instruction_trace_command (gdb.Command):
                 # write it to outputfile
                 try:
                     examine = gdb.execute ("x/{}xb $pc".format (disa[0]["length"]), to_string=True)
-                    formated_examine = format_examine (examine)
-                    addr = formated_examine[0]
-                    insn = formated_examine[1]
-                    labl = formated_examine[2]
+                    formatted_examine = format_examine (examine)
+                    addr = formatted_examine[0]
+                    insn = formatted_examine[1]
+                    labl = formatted_examine[2]
                 except gdb.error:
                     stop_command = True
                     stop_message = "error while examine $pc"
                 except:
                     stop_command = True
-                    stop_message = "error while formating examine"
+                    stop_message = "error while formating examine ({})".format (examine)
 
                 if disassemble:
                     asm = " ".join (disa[0]["asm"].split ())
